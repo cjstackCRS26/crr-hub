@@ -21,6 +21,9 @@ nav.jump a.on{color:var(--navy);border-bottom-color:var(--gold)}
 nav.jump a:focus-visible,button:focus-visible,summary:focus-visible,.btn:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 section.part{padding:40px 0 8px;scroll-margin-top:52px}
 h2{font-family:'IBM Plex Serif',Georgia,serif;font-size:27px;margin:0 0 6px}
+.vid.ph{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#C9D2DE;text-align:center;padding:24px;box-sizing:border-box;border:2px dashed #3E5675}
+.vid.ph b{color:#FFFFFF;font-size:18px}
+.aph{background:rgba(255,255,255,.08);border:2px dashed rgba(255,255,255,.35);border-radius:12px;padding:14px 16px;color:#FFFFFF;font-weight:600}
 .vid{width:100%;aspect-ratio:16/9;background:#0b1626;border-radius:12px;display:block}
 .lead{color:var(--mute);font-size:15px;margin:0 0 22px;line-height:1.5}
 .eyebrow{font-size:12px;font-weight:700;letter-spacing:.13em;color:var(--gold-ink);margin:0 0 6px}
@@ -387,7 +390,7 @@ $("pause").addEventListener("click",async()=>{try{await tts.pause();}catch(e){}}
 $("stop").addEventListener("click",async()=>{try{await tts.stop();}catch(e){}});
 $("rate").addEventListener("change",()=>{if(tts&&tts.setRate)tts.setRate(Number($("rate").value));});
 draw();
-function useMp3(m){["play","pause","stop"].forEach((i)=>{$(i).hidden=true;});$("rate").parentElement.hidden=true;status("");m.hidden=false;const own=m.dataset.prefer==="file";$("podhint").textContent=own?"Press play to listen.":"Press play to listen. The full script is in the transcript below.";$("podcredit").textContent=m.dataset.credit||"Voices are computer-generated, not real people. Voices: Piper TTS, LibriTTS (CC BY 4.0).";if(own&&!LINES.length)$("trbox").hidden=true;}
+function useMp3(m){["play","pause","stop"].forEach((i)=>{$(i).hidden=true;});$("rate").parentElement.hidden=true;status("");m.hidden=false;const own=m.dataset.prefer==="file";$("podhint").textContent=m.dataset.placeholder?"The episode is on its way. In the meantime, the article and slides cover the same ground.":own?"Press play to listen.":"Press play to listen. The full script is in the transcript below.";$("podcredit").textContent=m.dataset.credit||"Voices are computer-generated, not real people. Voices: Piper TTS, LibriTTS (CC BY 4.0).";if(own&&!LINES.length)$("trbox").hidden=true;}
 (async()=>{const m0=$("mp3");if(m0&&m0.dataset.prefer==="file"){useMp3(m0);return;}
  try{tts=window.claude?await window.claude.use("tts"):null;}catch(e){tts=null;}
  if(!tts){const m=$("mp3");if(m){useMp3(m);return;}noAudio();return;}
