@@ -387,8 +387,10 @@ $("pause").addEventListener("click",async()=>{try{await tts.pause();}catch(e){}}
 $("stop").addEventListener("click",async()=>{try{await tts.stop();}catch(e){}});
 $("rate").addEventListener("change",()=>{if(tts&&tts.setRate)tts.setRate(Number($("rate").value));});
 draw();
-(async()=>{try{tts=window.claude?await window.claude.use("tts"):null;}catch(e){tts=null;}
- if(!tts){const m=$("mp3");if(m){["play","pause","stop"].forEach((i)=>{$(i).hidden=true;});$("rate").parentElement.hidden=true;status("");m.hidden=false;$("podhint").textContent="Press play to listen. The full script is in the transcript below.";$("podcredit").textContent="Voices are computer-generated, not real people. Voices: Piper TTS, LibriTTS (CC BY 4.0).";return;}noAudio();return;}
+function useMp3(m){["play","pause","stop"].forEach((i)=>{$(i).hidden=true;});$("rate").parentElement.hidden=true;status("");m.hidden=false;const own=m.dataset.prefer==="file";$("podhint").textContent=own?"Press play to listen.":"Press play to listen. The full script is in the transcript below.";$("podcredit").textContent=m.dataset.credit||"Voices are computer-generated, not real people. Voices: Piper TTS, LibriTTS (CC BY 4.0).";if(own&&!LINES.length)$("trbox").hidden=true;}
+(async()=>{const m0=$("mp3");if(m0&&m0.dataset.prefer==="file"){useMp3(m0);return;}
+ try{tts=window.claude?await window.claude.use("tts"):null;}catch(e){tts=null;}
+ if(!tts){const m=$("mp3");if(m){useMp3(m);return;}noAudio();return;}
  if(tts.setRate)tts.setRate(Number($("rate").value));
  tts.onState(({state:s,reason})=>{state=s;draw();
   if(s==="idle"){if(reason==="completed"){status("Episode finished. Thanks for listening.");mark(null);}else if(reason==="not_granted"||reason==="unavailable")noAudio();else if(reason==="rate_limited")status("Too many plays just now. Try again in a minute.");else if(reason==="upstream_error")status("The audio stopped early. Press Play to try again.");else status("Stopped. Tap any line to play from there.");}
